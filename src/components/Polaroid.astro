@@ -1,0 +1,19 @@
+---
+interface Props {
+  photo?: "p1" | "p2" | "p3";
+  caption?: string;
+  washi?: boolean;
+  src?: string;      // optional real image (data: or /path)
+  alt?: string;
+  class?: string;
+}
+const { photo = "p1", caption, washi = false, src, alt = "", class: cls = "" } = Astro.props;
+const photoClass = photo === "p1" ? "" : photo;
+---
+<div class:list={["polaroid", photoClass, cls]}>
+  {src
+    ? <img class="photo" src={src} alt={alt} loading="lazy" />
+    : <div class="photo" role="img" aria-label={alt || caption || "photo"}></div>}
+  {washi && <div class="washi"></div>}
+  {caption && <div class="cap">{caption}</div>}
+</div>

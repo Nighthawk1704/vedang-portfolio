@@ -1,0 +1,29 @@
+---
+import { nav, identity } from "../data/site";
+interface Props { active?: string } // nav key of the current page
+const { active = "index" } = Astro.props;
+---
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-top">
+      <div>
+        <a class="mast-name" href="/">{identity.name}</a>
+        <div class="mast-sub">
+          {identity.taglineStruck && <s>{identity.taglineStruck}</s>} {identity.tagline}
+        </div>
+      </div>
+      <div class="vol">{identity.vol}</div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={{ active: item.key === active }}
+          aria-current={item.key === active ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

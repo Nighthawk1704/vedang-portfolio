@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" font-family="Menlo, Consolas, monospace">
+  <rect width="400" height="300" fill="#0b0e14"/>
+  <rect width="400" height="26" fill="#151a23"/>
+  <circle cx="16" cy="13" r="4" fill="#d9736a"/><circle cx="30" cy="13" r="4" fill="#e0b64e"/><circle cx="44" cy="13" r="4" fill="#8fbf8f"/>
+  <text x="200" y="17" text-anchor="middle" font-size="9" fill="#7d879b">pysandbox · docker-isolated</text>
+  <g font-size="8.5">
+    <text x="16" y="52" fill="#5fd08a">$ POST /run</text>
+    <text x="16" y="70" fill="#8b93a7">{ "code": "print(sum(range(10)))",</text>
+    <text x="16" y="84" fill="#8b93a7">  "timeout": 2, "mem": "128m" }</text>
+    <text x="16" y="108" fill="#7fc4ff">▸ spawning container  (network: none)</text>
+    <text x="16" y="122" fill="#7fc4ff">▸ cpu 0.5  ·  mem 128m  ·  pids 64</text>
+    <text x="16" y="140" fill="#e7ebf3">stdout: 45</text>
+    <text x="16" y="154" fill="#9aa3b8">exit 0  ·  128ms  ·  killed on 2.0s cap</text>
+  </g>
+  <!-- test panel -->
+  <rect x="16" y="172" width="368" height="104" rx="5" fill="#111721" stroke="#222a38"/>
+  <text x="26" y="190" font-size="8" fill="#8b93a7">edge-case suite</text>
+  <g font-size="8" fill="#cdd4e2">
+    <text x="26" y="208">✓ infinite loop → timeout</text>
+    <text x="210" y="208" fill="#5fd08a">pass</text>
+    <text x="26" y="224">✓ fork bomb → pid cap</text>
+    <text x="210" y="224" fill="#5fd08a">pass</text>
+    <text x="26" y="240">✓ oversized alloc → OOM kill</text>
+    <text x="210" y="240" fill="#5fd08a">pass</text>
+    <text x="26" y="256">✓ net egress → blocked</text>
+    <text x="210" y="256" fill="#5fd08a">pass</text>
+  </g>
+  <text x="300" y="268" font-size="9" fill="#5fd08a" font-weight="700">42/42 green</text>
+</svg>

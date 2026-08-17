@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import Polaroid from "../components/Polaroid.astro";
+import { projects, timeline, identity } from "../data/site";
+---
+<Base active="building" title="Vedang — Building." description="Things Vedang has built, shipped, and occasionally rebuilt.">
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <p class="label">Spread · The Workbench</p>
+      <h1>Building.</h1>
+      <p class="lead">everything I've built, shipped, and occasionally rebuilt — the full workbench, not just the highlights.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="build-grid">
+        <div class="build-col">
+          {projects.map((p) => (
+            <div class="project reveal" id={p.slug}>
+              <div class="tape"></div>
+              <div>
+                <div class="meta">{p.meta}</div>
+                <h3><span class="uline">{p.title}</span></h3>
+                <span class="status">{p.status}</span>
+                <p>{p.body}</p>
+                {p.repo && <a class="openpage" href={p.repo === "#" ? identity.github : p.repo} target="_blank" rel="noopener">open on github →</a>}
+              </div>
+              <Polaroid photo={p.photo} src={p.img} alt={`${p.title} — screenshot`} caption={p.caption} washi />
+            </div>
+          ))}
+          <p class="still reveal">← this is the thing. still being written.</p>
+        </div>
+
+        <aside class="sticky-tl reveal">
+          <p class="label">A partial timeline</p>
+          {timeline.map((t) => (
+            <div class="stl-item">
+              <div class="stl-date">{t.date}</div>
+              <div class="stl-body">
+                <Fragment set:html={t.body} />
+                {t.note && <div class="stl-note">{t.note}</div>}
+              </div>
+            </div>
+          ))}
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>

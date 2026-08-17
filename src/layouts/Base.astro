@@ -1,0 +1,228 @@
+---
+import "../styles/global.css";
+import Masthead from "../components/Masthead.astro";
+import GlobalFooter from "../components/GlobalFooter.astro";
+import { identity } from "../data/site";
+import favicon from "../data/favicon.json";
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: string;   // nav key for active tab
+  showFooter?: boolean;
+  showThread?: boolean; // the scroll-drawn weaving line (homepage only)
+}
+const {
+  title = `${identity.name} — a notebook, mostly.`,
+  description = `${identity.name} — a portfolio, a notebook, mostly.`,
+  active = "index",
+  showFooter = true,
+  showThread = false,
+} = Astro.props;
+
+/* Animated favicon — cycles the sprite's frames by swapping the <link rel=icon>
+   href on a timer, exactly like the reference site. Frames + per-frame delays come
+   from src/data/favicon.json (regenerate that to switch characters). */
+const faviconFrames = favicon.frames;
+const faviconDelays = favicon.delays;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Special+Elite&family=Caveat:wght@400..700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" id="favicon" type="image/png" href={faviconFrames[0]} />
+  <script is:inline define:vars={{ faviconFrames, faviconDelays }}>
+    // Animated favicon — cycles the sprite frames (same trick as the reference site).
+    (function () {
+      var link = document.getElementById("favicon");
+      if (!link || !faviconFrames || faviconFrames.length < 2) return;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // preload so swaps are instant (no flicker)
+      faviconFrames.forEach(function (src) { var i = new Image(); i.src = src; });
+
+      var i = 0, timer = null;
+      function step() {
+        i = (i + 1) % faviconFrames.length;
+        link.href = faviconFrames[i];
+        timer = setTimeout(step, faviconDelays[i] || 90);
+      }
+      function start() { if (!timer && !document.hidden && !reduce) timer = setTimeout(step, faviconDelays[i] || 90); }
+      function stop() { clearTimeout(timer); timer = null; }
+
+      link.href = faviconFrames[0];
+      if (reduce) return;                 // reduced-motion: hold the first frame
+      start();
+      // pause while the tab is in the background, resume when it's shown again
+      document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
+    })();
+  </script>
+</head>
+<body>
+  <div class="sky" aria-hidden="true"></div>
+  <div class="band"></div>
+  <div class="band two"></div>
+  <div class="band three"></div>
+
+  {showThread && (
+    <svg class="scroll-thread" aria-hidden="true" preserveAspectRatio="none">
+      <path id="thread-path" fill="none" stroke="var(--faded-red)"
+        stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  )}
+
+  <Masthead active={active} />
+
+  <slot />
+
+  {showFooter && <GlobalFooter />}
+
+  <!-- Global lightbox — click any corkboard or footer photo to open it full-size -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <button type="button" class="lb-close" id="lb-close" aria-label="Close">✕</button>
+    <figure>
+      <img id="lb-img" src="" alt="" />
+      <figcaption id="lb-cap"></figcaption>
+    </figure>
+  </div>
+
+  <script>
+    // Lightbox — click any corkboard or footer photo to open it full-size.
+    (function () {
+      var box = document.getElementById("lightbox");
+      var img = document.getElementById("lb-img");
+      var cap = document.getElementById("lb-cap");
+      if (!box || !img) return;
+
+      function open(src, caption, alt) {
+        img.setAttribute("src", src);
+        img.setAttribute("alt", alt || "");
+        cap.textContent = caption || "";
+        box.classList.add("open");
+        box.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+      function close() {
+        box.classList.remove("open");
+        box.setAttribute("aria-hidden", "true");
+        img.setAttribute("src", "");
+        document.body.style.overflow = "";
+      }
+
+      document.querySelectorAll(".corkboard img, .gallery .polaroid img").forEach(function (el) {
+        el.addEventListener("click", function () {
+          var pol = el.closest(".polaroid");
+          var capEl = pol ? pol.querySelector(".cap") : null;
+          open(el.currentSrc || el.getAttribute("src"), capEl ? capEl.textContent : el.getAttribute("alt"), el.getAttribute("alt"));
+        });
+      });
+      box.addEventListener("click", function (e) { if (e.target !== img) close(); });
+      document.getElementById("lb-close").addEventListener("click", close);
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    })();
+  </script>
+
+  <script>
+    // Scroll reveals — progressive enhancement
+    (function () {
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var els = document.querySelectorAll(".reveal");
+      if (!reduce && "IntersectionObserver" in window) {
+        document.documentElement.classList.add("js");
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+          });
+        }, { threshold: 0.12 });
+        els.forEach(function (e) { io.observe(e); });
+      }
+
+      // Scroll-drawn thread — a full-page line that weaves behind the content
+      // and "draws in" downward as you scroll.
+      var svg = document.querySelector(".scroll-thread");
+      var path = document.getElementById("thread-path");
+      if (svg && path && typeof path.getTotalLength === "function") {
+        var len = 0;
+        var threadH = 0;   // y where the thread ends (footer top)
+        var threadTop = 0; // y where the thread begins (top of the hero)
+
+        function buildPath() {
+          var W = document.documentElement.clientWidth;
+          var docH = document.documentElement.scrollHeight;
+          // start the thread at the top of the hero (below the masthead), not the page corner
+          var hero = document.querySelector("section.hero") || document.querySelector("main section, section");
+          var startY = hero ? Math.max(0, Math.round(hero.getBoundingClientRect().top + window.scrollY + 12)) : 190;
+          // stop the thread before the footer begins (don't run it into the footer)
+          var footer = document.querySelector("footer.footer");
+          var H = footer
+            ? Math.round(footer.getBoundingClientRect().top + window.scrollY - 40)
+            : docH;
+          if (H < startY + 200) H = docH;
+          threadH = H;
+          threadTop = startY;
+          svg.setAttribute("width", W);
+          svg.setAttribute("height", H);
+          svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+          var cx = W * 0.5;
+          var amp = Math.min(W * 0.5 - 30, 680); // reach close to both edges
+          var k = 0.0072;                          // wave frequency down the page
+          var phase = -Math.PI / 2;                // begin at the left edge
+          // extra reach that eases the very start out to (just past) the left screen edge,
+          // then decays so the rest of the wave is unaffected — no hook, flush entry.
+          var edge0 = Math.max(0, cx - amp * 0.9 + 20);
+          var d = "";
+          for (var y = startY; y <= H; y += 8) {
+            var t = y - startY;
+            // gently vary amplitude so it feels hand-drawn, not mechanical
+            var a = amp * (0.9 + 0.1 * Math.sin(t * 0.0016)) + edge0 * Math.exp(-t / 100);
+            var x = cx + a * Math.sin(t * k + phase);
+            d += (y === startY ? "M " : " L ") + x.toFixed(1) + " " + y;
+          }
+          path.setAttribute("d", d);
+          len = path.getTotalLength();
+          path.style.strokeDasharray = len + "";
+          draw();
+        }
+
+        function draw() {
+          if (reduce) { path.style.strokeDashoffset = "0"; return; }
+          var vh = window.innerHeight;
+          // draw the line down to ~80% of the current viewport, so the tip
+          // tracks your scroll 1:1 (points are evenly spaced in y, so a
+          // y-fraction ≈ a length-fraction).
+          var targetY = window.scrollY + vh * 0.8;
+          var span = threadH - threadTop;
+          var shown = span > 0 ? Math.min(1, Math.max(0, (targetY - threadTop) / span)) : 1;
+          path.style.strokeDashoffset = (len * (1 - shown)) + "";
+          // fully invisible on load; fades in over the first bit of scroll
+          path.style.opacity = (Math.min(1, window.scrollY / 160) * 0.55) + "";
+        }
+
+        buildPath();
+        if (!reduce) {
+          var ticking = false;
+          window.addEventListener("scroll", function () {
+            if (!ticking) { window.requestAnimationFrame(function () { draw(); ticking = false; }); ticking = true; }
+          }, { passive: true });
+        }
+        var rt;
+        window.addEventListener("resize", function () {
+          clearTimeout(rt); rt = setTimeout(buildPath, 150);
+        }, { passive: true });
+        window.addEventListener("load", buildPath);
+      }
+    })();
+  </script>
+</body>
+</html>

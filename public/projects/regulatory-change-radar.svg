@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" font-family="Menlo, Consolas, monospace">
+  <rect width="400" height="300" fill="#f4f1ea"/>
+  <!-- window chrome -->
+  <rect width="400" height="26" fill="#e4ddd0"/>
+  <circle cx="16" cy="13" r="4" fill="#d9736a"/><circle cx="30" cy="13" r="4" fill="#e0b64e"/><circle cx="44" cy="13" r="4" fill="#8fbf8f"/>
+  <text x="200" y="17" text-anchor="middle" font-size="9" fill="#7a7266">Regulatory Change Radar · v3 ⇄ v4</text>
+  <!-- two doc columns -->
+  <rect x="14" y="38" width="176" height="210" rx="4" fill="#fff" stroke="#ddd4c6"/>
+  <rect x="210" y="38" width="176" height="210" rx="4" fill="#fff" stroke="#ddd4c6"/>
+  <text x="22" y="54" font-size="8" fill="#9a9184">SANCTIONS_LIST · v3</text>
+  <text x="218" y="54" font-size="8" fill="#9a9184">SANCTIONS_LIST · v4</text>
+  <g font-size="7" fill="#4a453f">
+    <text x="22" y="72">§2.1 threshold  = 10,000</text>
+    <text x="22" y="86">§2.4 review    = 30 days</text>
+    <text x="22" y="100">§3.0 scope     = MSB</text>
+    <text x="218" y="72">§2.1 threshold  = 10,000</text>
+    <text x="218" y="100">§3.0 scope     = MSB + PSP</text>
+  </g>
+  <!-- changed line highlight -->
+  <rect x="216" y="80" width="164" height="12" fill="#ffe478" opacity="0.6"/>
+  <text x="218" y="90" font-size="7" fill="#7a5a1a">§2.4 review    = 14 days  ▲ changed</text>
+  <rect x="216" y="106" width="164" height="12" fill="#cfe6cf" opacity="0.7"/>
+  <text x="218" y="116" font-size="7" fill="#2f6b2f">+ §3.1 added: PSP obligations</text>
+  <!-- answer / citation panel -->
+  <rect x="14" y="200" width="372" height="44" rx="4" fill="#f7f4ec" stroke="#e0d8ca"/>
+  <text x="22" y="216" font-size="7" fill="#8a8175">Q: what changed in the review window?</text>
+  <text x="22" y="230" font-size="7.5" fill="#2c2822">A: shortened 30 → 14 days <tspan fill="#a45a4e">[cite §2.4, v4]</tspan></text>
+  <text x="22" y="240" font-size="6.5" fill="#a45a4e">low-confidence queries return “insufficient context”.</text>
+</svg>

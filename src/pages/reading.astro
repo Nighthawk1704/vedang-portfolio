@@ -1,0 +1,49 @@
+---
+import Base from "../layouts/Base.astro";
+import { books, quotes } from "../data/site";
+---
+<Base active="reading" title="Vedang — Reading." description="What Vedang is reading, and the passages worth keeping.">
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <p class="label">Spread · The Shelf</p>
+      <h1>What I'm reading.</h1>
+      <p class="lead">books on the go, and the lines I dog-eared along the way.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap reveal">
+      <p class="label">On the shelf</p>
+      <div class="shelf">
+        {books.map((b) => (
+          <div class="shelf-item">
+            <span class="shelf-ribbon" aria-hidden="true"></span>
+            <div>
+              <div class="bk-title"><span class="uline">{b.title}</span></div>
+              <div class="bk-meta">{b.author}</div>
+              <div class="bk-status">{b.status}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:10px">
+    <div class="wrap reveal">
+      <p class="label">Passages I kept</p>
+      <div class="quote-grid">
+        {quotes.map((q) => (
+          <div class="quote-card">
+            <div class="src">{q.src}</div>
+            <blockquote>
+              {q.mark ? <mark class="hl">{q.quote}</mark> : q.quote}
+            </blockquote>
+            <div class="attr">{q.attribution}</div>
+            <div class="react">{q.react}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

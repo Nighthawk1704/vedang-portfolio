@@ -1,0 +1,228 @@
+---
+import Base from "../layouts/Base.astro";
+import Polaroid from "../components/Polaroid.astro";
+
+// Idea clusters for the interactive research canvas
+const ideas = [
+  { x: 120, y: 90, tag: "retrieval", h: "Grounded RAG", p: "answer only from retrieved context — say “insufficient context” instead of bluffing." },
+  { x: 470, y: 160, tag: "diffing", h: "Clause-level diffs", p: "detect what changed between two document versions, not just that something did." },
+  { x: 820, y: 90, tag: "trust", h: "Citations first", p: "every claim points back to the exact source span it came from." },
+  { x: 260, y: 420, tag: "scraping", h: "Live store signals", p: "stock, reviews, descriptions — the raw material for ranking CRO opportunities." },
+  { x: 640, y: 460, tag: "ranking", h: "Impact × confidence × effort", p: "score opportunities so the top of the list is actually worth doing first." },
+  { x: 1020, y: 380, tag: "safety", h: "Sandboxed execution", p: "run untrusted code in Docker with limits + timeouts; assume it's hostile." },
+  { x: 480, y: 720, tag: "frontend", h: "60fps or it didn't happen", p: "20+ animated sections that still hold frame budget on a mid-range phone." },
+  { x: 900, y: 700, tag: "pipelines", h: "Boring reliable glue", p: "caching, retries, reconciliation — the code nobody demos but everyone needs." },
+];
+---
+<Base
+  active="captures"
+  title="Vedang — Captures & Collections."
+  description="A corkboard of captured moments, mockups, ugly little drawings, and an interactive research canvas."
+>
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <p class="label">Spread · The Pinboard</p>
+      <h1>Captures &amp; Collections.</h1>
+      <p class="lead">captured moments, pinned mockups, ugly little drawings, and half-formed ideas — before any of it earned code.</p>
+    </div>
+  </section>
+
+  <!-- Corkboard collage (pannable, like the research canvas) -->
+  <section style="padding-top:20px">
+    <div class="wrap reveal">
+      <p class="label">The pinboard · drag to move around</p>
+      <div class="canvas-frame" id="corkframe" tabindex="0" aria-label="Pinboard — drag to move around, scroll to zoom.">
+        <div class="canvas-badge">drag to pan · scroll to zoom</div>
+        <div class="corkboard" id="corkworld">
+        <div class="pin" style="top:28px; left:34px;">
+          <div class="sticky-note">what if the search just… refused to make things up?</div>
+        </div>
+        <div class="pin" style="top:20px; left:300px;">
+          <div class="wireframe">
+            <div style="margin-bottom:8px; letter-spacing:0.12em;">CHECKOUT · v0</div>
+            <div class="wf-row">cart</div>
+            <div class="wf-row">addr</div>
+            <div class="wf-row">pay</div>
+          </div>
+        </div>
+        <div class="pin" style="top:44px; right:40px;">
+          <div class="paperclip-shot" style="position:relative;">
+            <img class="shot" src="/projects/regulatory-change-radar.svg" alt="Regulatory Change Radar — document diff UI" loading="lazy" />
+          </div>
+        </div>
+        <div class="pin" style="top:270px; left:60px;">
+          <div class="sticky-note y" style="transform:rotate(2.5deg);">crawler: 10k records/day, 50+ sources. don't get IP-banned.</div>
+        </div>
+        <div class="pin" style="top:250px; left:360px;">
+          <div class="stat-card">
+            <div class="big">40%</div>
+            <div class="cap">faster page loads · post-migration</div>
+          </div>
+        </div>
+        <div class="pin" style="top:300px; right:70px;">
+          <div class="paperclip-shot" style="position:relative;">
+            <img class="shot" src="/projects/cro-opportunity-engine.svg" alt="CRO Opportunity Engine — ranked dashboard" loading="lazy" />
+          </div>
+        </div>
+        <div class="pin" style="top:470px; left:150px;">
+          <div class="wireframe" style="transform:rotate(-2deg);">
+            <div style="margin-bottom:8px; letter-spacing:0.12em;">RAG · flow</div>
+            <div class="wf-row">ingest → chunk</div>
+            <div class="wf-row">embed → store</div>
+            <div class="wf-row">retrieve → cite</div>
+          </div>
+        </div>
+        <div class="pin" style="top:480px; right:180px;">
+          <div class="sticky-note" style="background:#c9dbe8; transform:rotate(-3deg);">89% intent accuracy — the first thing that talked back.</div>
+        </div>
+
+        {/* ── PHOTO SLOTS ──────────────────────────────────────────────
+             Real photos live in  public/captures/  — swap src to change them,
+             or copy a pin and reposition with top/left in its inline style. */}
+        <div class="pin" style="top:110px; left:600px; width:196px;">
+          <Polaroid src="/captures/IMG_6624.jpeg" alt="friends after my ACL surgery"
+            caption="post-op, they stayed." washi />
+        </div>
+        <div class="pin" style="top:470px; left:470px; width:196px;">
+          <Polaroid src="/captures/IMG_6625.jpeg" alt="my dog in the garden"
+            caption="sun patrol." washi />
+        </div>
+        <div class="pin" style="top:650px; left:110px; width:186px;">
+          <Polaroid src="/captures/IMG_5101.jpeg" alt="my mother with my dog beside her"
+            caption="mum & the dog." washi />
+        </div>
+        <div class="pin" style="top:680px; left:360px; width:236px;">
+          <Polaroid src="/captures/IMG_6623.jpeg" alt="a beautiful sky over the road"
+            caption="a good sky." washi />
+        </div>
+        <div class="pin" style="top:640px; left:660px; width:182px;">
+          <Polaroid src="/captures/IMG_5144.jpeg" alt="my dog indoors"
+            caption="good boy." washi />
+        </div>
+        </div>
+        <div class="canvas-controls">
+          <button type="button" id="cork-zoom-out" aria-label="Zoom out">–</button>
+          <button type="button" id="cork-zoom-reset" aria-label="Reset view">⌂</button>
+          <button type="button" id="cork-zoom-in" aria-label="Zoom in">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive research canvas -->
+  <section style="padding-top:10px">
+    <div class="wrap">
+      <div class="canvas-cta reveal">
+        <p class="hint">hover the pile… then open the canvas and drag around.</p>
+        <p class="label">The research canvas · pannable</p>
+      </div>
+
+      <div class="canvas-frame reveal" id="canvas" tabindex="0" aria-label="Pannable research canvas — drag to move, scroll or use the buttons to zoom.">
+        <div class="canvas-badge">drag to pan · scroll to zoom</div>
+        <div class="canvas-world" id="world">
+          {ideas.map((i) => (
+            <div class="idea" style={`left:${i.x}px; top:${i.y}px;`}>
+              <span class="tag">{i.tag}</span>
+              <h4>{i.h}</h4>
+              <p>{i.p}</p>
+            </div>
+          ))}
+          <!-- connector lines drawn behind cards -->
+          <svg class="canvas-lines" width="2200" height="1500" style="position:absolute;inset:0;z-index:-1;pointer-events:none;">
+            <path d="M225 140 C 360 120, 380 190, 575 200" stroke="#cac3ba" stroke-width="1.5" fill="none"/>
+            <path d="M925 140 C 780 200, 720 260, 745 500" stroke="#cac3ba" stroke-width="1.5" fill="none"/>
+            <path d="M365 470 C 500 520, 560 520, 745 500" stroke="#cac3ba" stroke-width="1.5" fill="none"/>
+            <path d="M575 200 C 500 400, 420 600, 585 760" stroke="#cac3ba" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="canvas-controls">
+          <button type="button" id="zoom-out" aria-label="Zoom out">–</button>
+          <button type="button" id="zoom-reset" aria-label="Reset view">⌂</button>
+          <button type="button" id="zoom-in" aria-label="Zoom in">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Reusable pannable / zoomable board (vanilla, no deps).
+  // Used for both the research canvas and the pinboard corkboard.
+  function makePannable(opts) {
+    var frame = document.getElementById(opts.frameId);
+    var world = document.getElementById(opts.worldId);
+    if (!frame || !world) return;
+
+    var x = opts.x0 || 0, y = opts.y0 || 0, scale = 1;
+    var panning = false, sx = 0, sy = 0, ox = 0, oy = 0, moved = 0;
+    var MIN = 0.5, MAX = 1.8;
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function apply() { world.style.transform = "translate(" + x + "px," + y + "px) scale(" + scale + ")"; }
+    apply();
+
+    frame.addEventListener("pointerdown", function (e) {
+      panning = true; moved = 0;
+      sx = e.clientX; sy = e.clientY; ox = x; oy = y;
+      try { frame.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    frame.addEventListener("pointermove", function (e) {
+      if (!panning) return;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+      if (moved > 4) frame.classList.add("grabbing");
+      x = ox + dx; y = oy + dy; apply();
+    });
+    function endPan(e) {
+      panning = false; frame.classList.remove("grabbing");
+      try { frame.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+    frame.addEventListener("pointerup", endPan);
+    frame.addEventListener("pointercancel", endPan);
+
+    // A real drag shouldn't count as a click (so it won't open the lightbox).
+    frame.addEventListener("click", function (e) {
+      if (moved > 4) { e.stopPropagation(); e.preventDefault(); moved = 0; }
+    }, true);
+
+    frame.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      var prev = scale;
+      scale = clamp(scale - e.deltaY * 0.0012, MIN, MAX);
+      var rect = frame.getBoundingClientRect();
+      var cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+      x = cx - ((cx - x) * scale) / prev;
+      y = cy - ((cy - y) * scale) / prev;
+      apply();
+    }, { passive: false });
+
+    frame.addEventListener("keydown", function (e) {
+      var step = 40;
+      if (e.key === "ArrowLeft") { x += step; apply(); e.preventDefault(); }
+      else if (e.key === "ArrowRight") { x -= step; apply(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { y += step; apply(); e.preventDefault(); }
+      else if (e.key === "ArrowDown") { y -= step; apply(); e.preventDefault(); }
+    });
+
+    function zoom(dir) {
+      var prev = scale;
+      scale = clamp(scale + dir * 0.2, MIN, MAX);
+      var cx = frame.clientWidth / 2, cy = frame.clientHeight / 2;
+      x = cx - ((cx - x) * scale) / prev;
+      y = cy - ((cy - y) * scale) / prev;
+      apply();
+    }
+    if (opts.zoom) {
+      var zi = document.getElementById(opts.zoom.in);
+      var zo = document.getElementById(opts.zoom.out);
+      var zr = document.getElementById(opts.zoom.reset);
+      if (zi) zi.addEventListener("click", function () { zoom(1); });
+      if (zo) zo.addEventListener("click", function () { zoom(-1); });
+      if (zr) zr.addEventListener("click", function () { x = opts.x0 || 0; y = opts.y0 || 0; scale = 1; apply(); });
+    }
+  }
+
+  makePannable({ frameId: "canvas", worldId: "world", x0: -80, y0: -20,
+    zoom: { in: "zoom-in", out: "zoom-out", reset: "zoom-reset" } });
+  makePannable({ frameId: "corkframe", worldId: "corkworld", x0: 0, y0: 0,
+    zoom: { in: "cork-zoom-in", out: "cork-zoom-out", reset: "cork-zoom-reset" } });
+</script>

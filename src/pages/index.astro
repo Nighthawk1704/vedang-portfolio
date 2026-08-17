@@ -1,0 +1,134 @@
+---
+import Base from "../layouts/Base.astro";
+import Polaroid from "../components/Polaroid.astro";
+import { identity, hero, shortVersion, projects, timeline } from "../data/site";
+
+const featured = projects.filter((p) => p.featured);
+const wavy = `<svg width="120" height="14" viewBox="0 0 120 14" fill="none"><path d="M2 8 Q 12 1, 22 8 T 42 8 T 62 8 T 82 8 T 102 8 T 118 8" stroke="#68625c" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>`;
+---
+<Base active="index" showThread={true}>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap reveal">
+      <p class="label">Spread 01 · Today</p>
+      <h1 set:html={hero.html}></h1>
+      <div class="scrollhint">
+        <span class="wavy" aria-hidden="true" set:html={wavy}></span>
+        {hero.hint}
+      </div>
+    </div>
+  </section>
+
+  <!-- SHORT VERSION -->
+  <section>
+    <div class="wrap reveal">
+      <p class="label">The short version · for skimming</p>
+      <div class="card skim">
+        <div>
+          <div class="role">{shortVersion.role}</div>
+          <p>{shortVersion.blurb}</p>
+          <p class="label" style="margin-bottom:10px">Stack</p>
+          <div class="chips">
+            {shortVersion.stack.map((s) => <span class="chip">{s}</span>)}
+          </div>
+        </div>
+        <div>
+          <p class="label" style="margin-bottom:10px">What shipped</p>
+          <ul class="shipped">
+            {shortVersion.shipped.map((s) => (
+              <li>— <b>{s.title}</b>: {s.note}</li>
+            ))}
+          </ul>
+          <div class="quick">
+            <a class="ulink" href={identity.resume}>résumé (PDF)</a>
+            <a class="ulink" href={`mailto:${identity.email}`}>email</a>
+            <a class="ulink" href="/building">the workbench →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKBENCH -->
+  <section id="workbench">
+    <div class="wrap">
+      <div class="spread-intro reveal">
+        <p class="label">Spread · The Workbench</p>
+        <h2>Things I've built, shipped, and occasionally rebuilt.</h2>
+      </div>
+
+      {featured.map((p) => (
+        <div class="project reveal">
+          <div class="tape"></div>
+          <div>
+            <div class="meta">{p.meta}</div>
+            <h3>{p.title}</h3>
+            <span class="status">{p.status}</span>
+            <p>{p.body}</p>
+            <a class="openpage" href={`/building#${p.slug}`}>open the page →</a>
+          </div>
+          <Polaroid photo={p.photo} src={p.img} alt={`${p.title} — screenshot`} caption={p.caption} washi />
+        </div>
+      ))}
+
+      <p class="reveal" style="text-align:center;margin-top:10px">
+        <a class="ulink" href="/building" style="font-size:1.1rem">see everything I'm building — the full workbench →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section>
+    <div class="wrap">
+      <div class="spread-intro reveal">
+        <p class="label">Spread · Experience</p>
+        <h2>A rough timeline of how I got here.</h2>
+      </div>
+      <div class="timeline reveal">
+        {timeline.map((t) => (
+          <div class="tl-item">
+            <div class="tl-date">{t.date}</div>
+            <div class="tl-body">
+              <Fragment set:html={t.body} />
+              {t.note && <span class="tl-note">{t.note}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="still reveal">still being written.</p>
+    </div>
+  </section>
+
+  <!-- DETOUR / SKETCHES -->
+  <section id="sketches">
+    <div class="wrap reveal">
+      <p class="label">A detour, if you'd like one</p>
+      <div class="detour">
+        <div>
+          <h2>most ideas start as <span class="em">ugly little drawings</span> before they earn any code.</h2>
+          <p>flows, wireframes, half-arrows, scribbles I'd be embarrassed to show in a meeting. they all live in the sketchbook.</p>
+          <a class="btn" href="/captures-collections">open the collection</a>
+        </div>
+        <Polaroid photo="p3" caption="the sketchbook." washi class="detour-pola" />
+      </div>
+    </div>
+  </section>
+
+  <!-- HELLO -->
+  <section id="hello">
+    <div class="wrap reveal hello">
+      <p class="label">The oldest way still works best</p>
+      <h2>say hello.</h2>
+      <p class="lead">best way to reach me is still an email — I read everything, reply slowly, but I reply.</p>
+      <div class="links">
+        <a class="ulink" href={`mailto:${identity.email}`}>{identity.email}</a>
+        <a class="ulink" href={identity.linkedin}>linkedin</a>
+        <a class="ulink" href={identity.github}>github</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .detour-pola { margin-left: auto; }
+</style>

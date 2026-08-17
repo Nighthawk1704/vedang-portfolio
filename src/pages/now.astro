@@ -1,0 +1,53 @@
+---
+import Base from "../layouts/Base.astro";
+import { now } from "../data/site";
+---
+<Base active="now" title="Vedang — Now." description="What Vedang is doing now — a page that goes out of date on purpose.">
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <p class="now-updated">Last updated · {now.updated}</p>
+      <h1 style="margin-top:14px">Now.</h1>
+      <p class="lead">{now.tagline}</p>
+      <p class="now-intro">{now.intro}</p>
+    </div>
+  </section>
+
+  <section style="padding-top:16px">
+    <div class="wrap reveal">
+      <div class="now-grid">
+        {now.categories.map((c) => (
+          <div class="now-card">
+            <h3>{c.title}</h3>
+            <ul>
+              {c.items.map((it) => <li set:html={it}></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- the rest of the desk -->
+  <section style="padding-top:0">
+    <div class="wrap reveal">
+      <p class="label">The rest of the desk</p>
+      <div class="now-strip">
+        <div class="now-mini">
+          <h3>Tools I live in</h3>
+          <div class="chips">
+            {now.tools.map((t) => <span class="chip">{t}</span>)}
+          </div>
+        </div>
+        <div class="now-mini">
+          <h3>Where</h3>
+          <p>{now.where}</p>
+        </div>
+        <div class="now-mini">
+          <h3>Open to</h3>
+          <p>{now.openTo}</p>
+        </div>
+      </div>
+      <p class="now-close reveal">{now.close}</p>
+    </div>
+  </section>
+</Base>

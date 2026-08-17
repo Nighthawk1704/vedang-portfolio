@@ -1,0 +1,53 @@
+---
+import Base from "../layouts/Base.astro";
+import { identity } from "../data/site";
+---
+<Base active="contact" title="Vedang — Say hello." description="Ways to reach Vedang Sai Rath.">
+  <section class="page-hero">
+    <div class="wrap reveal">
+      <p class="label">The oldest way still works best</p>
+      <h1>Say hello.</h1>
+      <p class="lead">best way to reach me is still an email — I read everything, reply slowly, but I reply.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="reveal">
+          <p class="label">Ways to find me</p>
+          <dl class="deflist">
+            <dt>Email</dt>
+            <dd><a href={`mailto:${identity.email}`}>{identity.email}</a></dd>
+            <dt>LinkedIn</dt>
+            <dd><a href={identity.linkedin} target="_blank" rel="noopener">in/vedang-sai-rath</a></dd>
+            <dt>GitHub</dt>
+            <dd><a href={identity.github} target="_blank" rel="noopener">@Nighthawk1704</a></dd>
+            <dt>City</dt>
+            <dd>{identity.city}</dd>
+          </dl>
+          <p class="contact-note">
+            good reasons to write: you're building something at the intersection of
+            product and systems, you want to talk RAG and retrieval that doesn't bluff,
+            or you just found a bug on this page and can't help yourself.
+          </p>
+        </div>
+
+        <div class="reveal">
+          <div class="folder" data-tab="CLICK HERE TO PREVIEW">
+            <div class="sheet">
+              <h3>The résumé.</h3>
+              <p>the one-page version — experience, projects, and the stack, in the usual boring order.</p>
+              <a class="dl" href={identity.resume} target="_blank" rel="noopener">
+                download (PDF)
+                <svg width="46" height="16" viewBox="0 0 46 16" fill="none" aria-hidden="true">
+                  <path d="M1 8 H 38 M 32 3 L 40 8 L 32 13" stroke="#a45a4e" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

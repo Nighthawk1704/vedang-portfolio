@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" font-family="Arial, Helvetica, sans-serif">
+  <rect width="400" height="300" fill="#eef2f4"/>
+  <!-- phone / chat frame -->
+  <rect x="120" y="18" width="160" height="264" rx="16" fill="#ffffff" stroke="#d6dde1"/>
+  <rect x="120" y="18" width="160" height="34" rx="16" fill="#4a7c59"/>
+  <rect x="120" y="40" width="160" height="12" fill="#4a7c59"/>
+  <circle cx="140" cy="35" r="8" fill="#fff" opacity="0.85"/>
+  <text x="156" y="39" font-size="9" fill="#fff" font-weight="700">CETPA Assistant</text>
+  <!-- bubbles -->
+  <rect x="136" y="66" width="104" height="24" rx="10" fill="#eef1ee"/>
+  <text x="144" y="81" font-size="7.5" fill="#3a423b">Hi! How can I help today?</text>
+  <rect x="166" y="98" width="98" height="22" rx="10" fill="#4a7c59"/>
+  <text x="174" y="112" font-size="7.5" fill="#fff">Book a demo class</text>
+  <rect x="136" y="128" width="118" height="34" rx="10" fill="#eef1ee"/>
+  <text x="144" y="142" font-size="7.5" fill="#3a423b">Sure — which course?</text>
+  <text x="144" y="154" font-size="7" fill="#8a938b">intent: booking · 0.94</text>
+  <rect x="176" y="170" width="88" height="22" rx="10" fill="#4a7c59"/>
+  <text x="184" y="184" font-size="7.5" fill="#fff">Python, evenings</text>
+  <rect x="136" y="200" width="120" height="34" rx="10" fill="#eef1ee"/>
+  <text x="144" y="214" font-size="7.5" fill="#3a423b">Booked for Tue 7pm ✓</text>
+  <text x="144" y="226" font-size="7" fill="#8a938b">logged → sqlite</text>
+  <!-- input -->
+  <rect x="136" y="248" width="128" height="20" rx="10" fill="#f2f4f2" stroke="#dfe4df"/>
+  <text x="144" y="261" font-size="7.5" fill="#9aa39a">Type a message…</text>
+  <!-- side stat -->
+  <text x="18" y="120" font-size="34" font-weight="800" fill="#4a7c59">89%</text>
+  <text x="18" y="138" font-size="8" fill="#5a6360">intent-classification</text>
+  <text x="18" y="150" font-size="8" fill="#5a6360">accuracy</text>
+  <text x="18" y="176" font-size="7.5" fill="#8a938b">Python · TensorFlow</text>
+  <text x="18" y="188" font-size="7.5" fill="#8a938b">NLTK · Flask · SQLite</text>
+</svg>

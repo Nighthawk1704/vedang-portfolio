@@ -1,0 +1,28 @@
+---
+import { identity, gallery } from "../data/site";
+import Polaroid from "./Polaroid.astro";
+---
+<footer class="footer">
+  <div class="wrap reveal">
+    <p class="wander">if you'd like to wander further —</p>
+    <div class="wander-links">
+      <a href="/building">things i've built</a>
+      <a href="/reading">things i'm reading</a>
+      <a href="/captures-collections">things i've drawn &amp; saved</a>
+      <a href="/now">what i'm doing now</a>
+      <a href="/contact">say hello</a>
+    </div>
+    <p class="fineprint">a notebook, kept by {identity.name} · {identity.city}</p>
+  </div>
+  <div class="gallery reveal">
+    {gallery.map((g) => (
+      <Polaroid src={g.src} alt={g.caption} caption={g.caption} />
+    ))}
+  </div>
+  <div class="wrap">
+    <div class="footer-close">
+      <span>kept by hand · 2026</span>
+      <span class="r">if you're reading this, you wandered far enough.</span>
+    </div>
+  </div>
+</footer>
